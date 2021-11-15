@@ -58,7 +58,7 @@ app.post('/users', (request, response) => {
     userExists = getUserByUserName(username);
 
   if (userExists) {
-    return response.status(404).send({error: "User alredy exists!"});
+    return response.status(400).send({error: "User alredy exists!"});
   }
 
   const newUser = {
@@ -70,7 +70,7 @@ app.post('/users', (request, response) => {
 
   users.push(newUser);
 
-  return response.status(201).send();
+  return response.status(201).send(newUser);
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
@@ -90,7 +90,7 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
 
   user.todos.push(todo);
 
-  return response.status(201).send();
+  return response.status(201).send(todo);
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
@@ -104,7 +104,7 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
   todo.title = title;
   todo.deadline = new Date(deadline);
 
-  return response.status(201).send();
+  return response.status(201).send(todo);
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
@@ -115,7 +115,7 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
 
   todo.done = true;
 
-  return response.status(201).send();
+  return response.status(201).send(todo);
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
@@ -130,7 +130,7 @@ app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
 
   todos.splice(todos.findIndex(value => value.id === id), 1);
 
-  return response.status(201).send();
+  return response.status(204).send();
 });
 
 module.exports = app;
